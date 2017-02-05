@@ -67,18 +67,12 @@ public class MainActivity extends AppCompatActivity {
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    Dao<Players, Long> playersDao = getHelper().getPlayersDao();
-                    playersDao.create(new Players("Adam", 270, true));
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-//                getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .replace(R.id.fragmentContainer, new PreparationFragment(), PREPARATION_FRAGMENT)
-//                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-//                        .addToBackStack(PREPARATION_FRAGMENT)
-//                        .commit();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, new PreparationFragment(), PREPARATION_FRAGMENT)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .addToBackStack(PREPARATION_FRAGMENT)
+                        .commit();
             }
         });
     }

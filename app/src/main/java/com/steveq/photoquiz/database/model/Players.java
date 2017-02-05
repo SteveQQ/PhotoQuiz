@@ -22,9 +22,8 @@ public class Players {
 
     }
 
-    public Players(String name, int score, boolean saved) {
+    public Players(String name, boolean saved) {
         this.name = name;
-        this.score = score;
         this.saved = saved;
     }
 
