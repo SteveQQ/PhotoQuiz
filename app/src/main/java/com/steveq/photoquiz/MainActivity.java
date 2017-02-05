@@ -10,9 +10,18 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
+import com.steveq.photoquiz.adapters.RankingAdapter;
+import com.steveq.photoquiz.database.QuizOpenDatabaseHelper;
+import com.steveq.photoquiz.database.model.Players;
+
+import java.sql.SQLException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String RANKING_FRAGMENT = "RANKING_FRAGMENT";
     public static final String PREPARATION_FRAGMENT = "PREPARATION_FRAGMENT";
+    private QuizOpenDatabaseHelper databaseHelper = null;
+
     @BindView(R.id.mainAppBar) AppBarLayout mAppBarLayout;
     @BindView(R.id.collapsingToolbar) CollapsingToolbarLayout mCollapsingToolbarLayout;
     @BindView(R.id.fragmentContainer) FrameLayout mFragmentContainer;
@@ -36,13 +47,13 @@ public class MainActivity extends AppCompatActivity {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
-        View view = LayoutInflater.from(this).inflate(R.layout.activity_main, null);
+        ViewGroup view = (ViewGroup) getLayoutInflater().inflate(R.layout.activity_main, null);
 
 
-//        mAppBarLayout = (AppBarLayout) view.findViewById(R.id.mainAppBar);
-//        mCollapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapsingToolbar);
-//        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mCollapsingToolbarLayout.getLayoutParams();
-//        params.setScrollFlags(0);
+        mAppBarLayout = (AppBarLayout) view.findViewById(R.id.mainAppBar);
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapsingToolbar);
+        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mCollapsingToolbarLayout.getLayoutParams();
+        params.setScrollFlags(0);
         setContentView(view);
 
         ButterKnife.bind(this, view);
@@ -56,13 +67,35 @@ public class MainActivity extends AppCompatActivity {
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainer, new PreparationFragment(), PREPARATION_FRAGMENT)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .addToBackStack(PREPARATION_FRAGMENT)
-                        .commit();
+                try {
+                    Dao<Players, Long> playersDao = getHelper().getPlayersDao();
+                    playersDao.create(new Players("Adam", 270, true));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+//                getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.id.fragmentContainer, new PreparationFragment(), PREPARATION_FRAGMENT)
+//                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+//                        .addToBackStack(PREPARATION_FRAGMENT)
+//                        .commit();
             }
         });
+    }
+
+    private QuizOpenDatabaseHelper getHelper(){
+        if(databaseHelper == null){
+            databaseHelper = OpenHelperManager.getHelper(this, QuizOpenDatabaseHelper.class);
+        }
+        return databaseHelper;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(databaseHelper != null){
+            OpenHelperManager.releaseHelper();
+            databaseHelper = null;
+        }
     }
 }
