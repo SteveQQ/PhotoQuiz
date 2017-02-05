@@ -15,14 +15,8 @@
         <FrameLayout
             android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="32dp">
-
+            android:layout_height="match_parent">
         </FrameLayout>
-        <!--<TextView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:text="@string/lorem_ipsum"/>-->
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.AppBarLayout
@@ -69,8 +63,9 @@
         app:fabSize="normal"
         app:layout_anchor="@id/mainAppBar"
         app:layout_anchorGravity="bottom|right"
-        android:src="@drawable/ic_play_vec"
+        app:srcCompat="@drawable/ic_play_vec"
         android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
         android:elevation="4dp"/>
 
 

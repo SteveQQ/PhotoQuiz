@@ -3,10 +3,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
               android:orientation="vertical"
-              android:paddingLeft="16dp"
-              android:paddingRight="16dp"
-              android:paddingTop="16dp"
-              android:paddingBottom="16dp"
+              android:padding="8dp"
              tools:context="com.steveq.photoquiz.PreparationFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -23,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/save_pictures"
-        android:textSize="@dimen/medium_text"/>
+        android:textSize="@dimen/medium_text"
+        android:layout_marginTop="8dp"/>
 
 </LinearLayout>

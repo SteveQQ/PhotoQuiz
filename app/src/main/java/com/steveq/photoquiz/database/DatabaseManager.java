@@ -6,10 +6,13 @@ import android.content.Context;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.UpdateBuilder;
+import com.steveq.photoquiz.database.model.Objects;
 import com.steveq.photoquiz.database.model.Players;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class DatabaseManager {
     private static DatabaseManager instance;
@@ -75,7 +78,19 @@ public class DatabaseManager {
         return results.isEmpty();
     }
 
-    public void fillObjectsListRandomly(){
-
+    public List<Objects> getRandomListObject(){
+        List<Objects> result = new ArrayList<>();
+        Random randomGenerator = new Random();
+        try {
+            List<Objects> temp = getHelper().getObjectsDao().queryForAll();
+            while(result.size() < 10){
+                int index = randomGenerator.nextInt(26);
+                result.add(temp.get(index));
+                temp.remove(index);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

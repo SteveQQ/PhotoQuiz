@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/questionTextView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        android:textSize="@dimen/medium_text"
+        android:gravity="center"
+        tools:text="banana"/>
+
+    <ImageButton
+        android:id="@+id/cameraImageButton"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/ic_camera_vec"
+        android:contentDescription="@string/image_button_description"/>
+
+    <ImageView
+        android:id="@+id/questionStatusImageView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/status_image_description"
+        android:layout_weight="0.5"
+        app:srcCompat="@drawable/ic_dots_vec"/>
+
+</LinearLayout>

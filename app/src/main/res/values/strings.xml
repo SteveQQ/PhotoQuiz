@@ -6,6 +6,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint_name">Name</string>
     <string name="save_pictures">Save pictures</string>
+    <string name="image_button_description">Button which allows take a photo</string>
+    <string name="status_image_description">actual status of answer to the question</string>
 
     <string-array name="objects">
         <item>banana</item>
