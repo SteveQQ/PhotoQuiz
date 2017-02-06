@@ -20,6 +20,7 @@ public class QuizOpenDatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final String DATABASE_NAME = "quiz_db";
     private static final int DATABASE_VERSION = 1;
     private static final String TAG = QuizOpenDatabaseHelper.class.getSimpleName();
+    private Context mContext;
 
     private Dao<Players, Long> usersDao = null;
     private Dao<Objects, Long> objectsDao = null;
@@ -40,6 +41,7 @@ public class QuizOpenDatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     public QuizOpenDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        mContext = context;
     }
 
 
@@ -48,6 +50,7 @@ public class QuizOpenDatabaseHelper extends OrmLiteSqliteOpenHelper {
         try{
             TableUtils.createTable(connectionSource, Players.class);
             TableUtils.createTable(connectionSource, Objects.class);
+            DatabaseManager.getInstance(mContext).seedObjectsTable(mContext.getResources().getStringArray(R.array.objects));
         } catch (SQLException sqle){
             Log.e(TAG, "Can't create database");
             sqle.printStackTrace();

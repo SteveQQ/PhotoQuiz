@@ -2,7 +2,11 @@ package com.steveq.photoquiz;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,11 +23,17 @@ public class QuizFragment extends Fragment {
 
     RecyclerView quizRecyclerView;
     QuestionsAdapter mAdapter;
+    private AppCompatActivity mActivity;
 
     public QuizFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mActivity = (AppCompatActivity) getActivity();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,7 +45,17 @@ public class QuizFragment extends Fragment {
         quizRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         quizRecyclerView.setAdapter(mAdapter);
 
-        return inflater.inflate(R.layout.fragment_quiz, container, false);
+        enableScrolling();
+
+        return viewGroup;
+    }
+
+    private void enableScrolling() {
+        CollapsingToolbarLayout coll = ((MainActivity)mActivity).getCollapsingToolbarLayout();
+        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) coll.getLayoutParams();
+        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+        coll.setLayoutParams(params);
+        ((MainActivity)mActivity).setCollapsingToolbarLayout(coll);
     }
 
 }

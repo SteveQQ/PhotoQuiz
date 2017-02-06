@@ -84,7 +84,7 @@ public class DatabaseManager {
         try {
             List<Objects> temp = getHelper().getObjectsDao().queryForAll();
             while(result.size() < 10){
-                int index = randomGenerator.nextInt(26);
+                int index = randomGenerator.nextInt(temp.size());
                 result.add(temp.get(index));
                 temp.remove(index);
             }
@@ -92,5 +92,16 @@ public class DatabaseManager {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public void seedObjectsTable(String[] data){
+        for(String s : data){
+            Objects object = new Objects(s);
+            try {
+                getHelper().getObjectsDao().create(object);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
