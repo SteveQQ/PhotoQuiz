@@ -1,8 +1,12 @@
 package com.steveq.photoquiz.adapters;
 
 
+import android.support.v7.app.AppCompatActivity;
 import android.content.Context;
+import android.content.Intent;
+import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.steveq.photoquiz.FilesUtils;
 import com.steveq.photoquiz.R;
 import com.steveq.photoquiz.database.DatabaseManager;
 import com.steveq.photoquiz.database.model.Objects;
@@ -18,12 +23,18 @@ import java.util.List;
 
 public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.QuestionViewHolder>{
 
+    private static final int REQUEST_TAKE_PHOTO = 0;
+    private static final String TAG = QuestionsAdapter.class.getSimpleName();
     private List<Objects> data;
-    private Context mContext;
+    private AppCompatActivity mActivity;
+    private FilesUtils mFilesUtils;
+    private long mPlayerId;
 
-    public QuestionsAdapter(Context ctx) {
-        this.mContext = ctx;
-        data = DatabaseManager.getInstance(mContext).getRandomListObject();
+    public QuestionsAdapter(AppCompatActivity activity, long id) {
+        this.mActivity = activity;
+        data = DatabaseManager.getInstance(mActivity).getRandomListObject();
+        mFilesUtils = new FilesUtils(activity);
+        mPlayerId = id;
     }
 
     public class QuestionViewHolder extends RecyclerView.ViewHolder{
@@ -50,6 +61,14 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
     @Override
     public void onBindViewHolder(QuestionViewHolder holder, int position) {
         holder.questionTextView.setText(data.get(position).getName());
+        holder.cameraImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                mActivity.startActivityForResult(takePhotoIntent, REQUEST_TAKE_PHOTO);
+                Log.d(TAG, mFilesUtils.getOutputUri(mPlayerId).toString());
+            }
+        });
     }
 
     @Override

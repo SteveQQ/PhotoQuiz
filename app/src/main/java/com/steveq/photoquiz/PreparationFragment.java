@@ -12,6 +12,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.steveq.photoquiz.database.DatabaseManager;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 /**
@@ -23,6 +31,9 @@ public class PreparationFragment extends Fragment {
     private static final String TAG = PreparationFragment.class.getSimpleName();
 
     private AppCompatActivity mActivity;
+
+    @BindView(R.id.nameEditText) EditText nameEditText;
+    @BindView(R.id.saveCheckBox) CheckBox saveCheckBox;
 
     public PreparationFragment() {
         // Required empty public constructor
@@ -45,9 +56,13 @@ public class PreparationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_preparation, container, false);
+        ButterKnife.bind(this, viewGroup);
+
         Log.d(TAG, "onCreateView");
         disableScrolling();
-        return inflater.inflate(R.layout.fragment_preparation, container, false);
+        enableBack();
+        return viewGroup;
     }
 
 
@@ -57,5 +72,14 @@ public class PreparationFragment extends Fragment {
         params.setScrollFlags(0);
         coll.setLayoutParams(params);
         ((MainActivity)mActivity).setCollapsingToolbarLayout(coll);
+    }
+
+    private void enableBack() {
+        ((MainActivity)mActivity).setBackAllowed(true);
+    }
+
+    public long createPlayer(){
+        return DatabaseManager.getInstance(mActivity)
+                .addNewPlayer(nameEditText.getText().toString(), saveCheckBox.isChecked());
     }
 }

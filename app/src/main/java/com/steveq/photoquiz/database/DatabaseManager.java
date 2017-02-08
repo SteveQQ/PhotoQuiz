@@ -46,12 +46,15 @@ public class DatabaseManager {
         return bestPlayers;
     }
 
-    public void addNewPlayer(String name, boolean saved){
+    public long addNewPlayer(String name, boolean saved){
+        Players newPlayer = null;
         try {
-            getHelper().getPlayersDao().create(new Players(name, saved));
+            newPlayer = new Players(name, saved);
+            getHelper().getPlayersDao().create(newPlayer);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return newPlayer.getId();
     }
 
     public void updatePlayerScore(long id, int score){
@@ -65,7 +68,7 @@ public class DatabaseManager {
         }
     }
 
-    public boolean isSaved(long id){
+    public boolean isSaving(long id){
         List<Players> results = null;
         try {
             QueryBuilder<Players, Long> queryBuilder = getHelper().getPlayersDao().queryBuilder();

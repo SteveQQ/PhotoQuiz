@@ -46,8 +46,13 @@ public class RankingFragment extends Fragment {
         mRankingRecyclingView.setAdapter(mAdapter);
 
         disableScrolling();
+        enableBack();
 
         return viewGroup;
+    }
+
+    private void enableBack() {
+        ((MainActivity)mActivity).setBackAllowed(true);
     }
 
     private void disableScrolling() {

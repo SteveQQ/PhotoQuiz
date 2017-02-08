@@ -19,11 +19,12 @@ import com.steveq.photoquiz.adapters.QuestionsAdapter;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class QuizFragment extends Fragment {
+public class QuizFragment extends Fragment{
 
-    RecyclerView quizRecyclerView;
-    QuestionsAdapter mAdapter;
+    private RecyclerView quizRecyclerView;
+    private QuestionsAdapter mAdapter;
     private AppCompatActivity mActivity;
+    private long currentPlayer;
 
     public QuizFragment() {
         // Required empty public constructor
@@ -38,16 +39,24 @@ public class QuizFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Bundle args = getArguments();
+        long id = args.getLong(MainActivity.PLAYER_ID);
+
         // Inflate the layout for this fragment
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_quiz, container, false);
         quizRecyclerView = (RecyclerView) viewGroup.findViewById(R.id.quizRecyclerView);
-        mAdapter = new QuestionsAdapter(getContext());
+        mAdapter = new QuestionsAdapter((AppCompatActivity) getContext(), id);
         quizRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         quizRecyclerView.setAdapter(mAdapter);
 
         enableScrolling();
+        disableBack();
 
         return viewGroup;
+    }
+
+    private void disableBack() {
+        ((MainActivity)mActivity).setBackAllowed(false);
     }
 
     private void enableScrolling() {
@@ -57,5 +66,4 @@ public class QuizFragment extends Fragment {
         coll.setLayoutParams(params);
         ((MainActivity)mActivity).setCollapsingToolbarLayout(coll);
     }
-
 }
