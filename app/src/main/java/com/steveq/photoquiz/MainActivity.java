@@ -1,16 +1,25 @@
 package com.steveq.photoquiz;
 
+import android.Manifest;
+import android.content.Intent;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.steveq.photoquiz.adapters.QuestionsAdapter;
 import com.steveq.photoquiz.database.DatabaseManager;
 import com.steveq.photoquiz.database.QuizOpenDatabaseHelper;
 
@@ -42,6 +51,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/Roboto-RobotoRegular.ttf")
                 .setFontAttrId(R.attr.fontPath)
@@ -125,6 +135,28 @@ public class MainActivity extends AppCompatActivity{
             super.onBackPressed();
         } else {
 
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == RESULT_OK){
+            Log.d(TAG, FilesUtils.outFile.getAbsolutePath());
+           // sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + FilesUtils.outFile.getAbsolutePath())));
+
+            MediaScannerConnection.scanFile(getApplicationContext(),
+                    new String[]{FilesUtils.outUri.getPath()},
+                    null,
+                    new MediaScannerConnection.OnScanCompletedListener()
+                    {
+                        @Override
+                        public void onScanCompleted(String path, Uri uri) {
+                        }
+                    });
+        } else if (resultCode != RESULT_CANCELED) {
+            Toast.makeText(this, "Sorry, there was an error!", Toast.LENGTH_SHORT).show();
         }
     }
 }

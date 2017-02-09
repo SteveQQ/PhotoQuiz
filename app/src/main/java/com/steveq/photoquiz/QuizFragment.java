@@ -24,7 +24,6 @@ public class QuizFragment extends Fragment{
     private RecyclerView quizRecyclerView;
     private QuestionsAdapter mAdapter;
     private AppCompatActivity mActivity;
-    private long currentPlayer;
 
     public QuizFragment() {
         // Required empty public constructor

@@ -72,13 +72,13 @@ public class DatabaseManager {
         List<Players> results = null;
         try {
             QueryBuilder<Players, Long> queryBuilder = getHelper().getPlayersDao().queryBuilder();
+            queryBuilder.selectColumns("saved");
             queryBuilder.where().eq("_id", id);
-            queryBuilder.where().eq("saved", true);
             results = queryBuilder.query();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return results.isEmpty();
+        return (results.get(0)).isSaved();
     }
 
     public List<Objects> getRandomListObject(){

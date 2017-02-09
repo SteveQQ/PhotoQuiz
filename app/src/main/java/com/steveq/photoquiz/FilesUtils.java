@@ -4,6 +4,7 @@ package com.steveq.photoquiz;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 
 import com.steveq.photoquiz.database.DatabaseManager;
 
@@ -14,17 +15,24 @@ import java.util.Date;
 
 public class FilesUtils {
 
-    Context mContext;
-    String fileType = ".jpg";
+    private static final String TAG = FilesUtils.class.getSimpleName();
+    private Context mContext;
+    private String fileType = ".jpg";
+    public static File outFile;
+    public static Uri outUri;
 
     public FilesUtils(Context context) {
         mContext = context;
     }
 
-    public Uri getOutputUri(long id){
+    public Uri getOutputUri(long id) throws IllegalStateException{
         File outputDir = null;
-        if(isSavingAllowed(id) && isExternalStorageAvailable()){
-            outputDir = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        if(isSavingAllowed(id)){
+            outputDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/PhotoQuiz");
+
+            if (!outputDir.exists()) {
+                outputDir.mkdirs();
+            }
 
             File photoFile = null;
             try {
@@ -33,7 +41,7 @@ public class FilesUtils {
                 e.printStackTrace();
             }
             return Uri.fromFile(photoFile);
-        } else {
+        } else if(!isSavingAllowed(id)) {
             outputDir = mContext.getCacheDir();
 
             File photoFile = null;
@@ -42,7 +50,11 @@ public class FilesUtils {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            outFile = outputDir;
+            outUri = Uri.fromFile(photoFile);
             return Uri.fromFile(photoFile);
+        } else {
+            throw new IllegalStateException();
         }
     }
 

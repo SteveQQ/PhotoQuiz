@@ -1,6 +1,7 @@
 package com.steveq.photoquiz.adapters;
 
 
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.steveq.photoquiz.FilesUtils;
 import com.steveq.photoquiz.R;
@@ -58,15 +60,19 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
         return new QuestionViewHolder(view);
     }
 
+
+
     @Override
     public void onBindViewHolder(QuestionViewHolder holder, int position) {
         holder.questionTextView.setText(data.get(position).getName());
         holder.cameraImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                mActivity.startActivityForResult(takePhotoIntent, REQUEST_TAKE_PHOTO);
-                Log.d(TAG, mFilesUtils.getOutputUri(mPlayerId).toString());
+                Uri outUri = mFilesUtils.getOutputUri(mPlayerId);
+                Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, outUri);
+                mActivity.startActivityForResult(takePhotoIntent, REQUEST_TAKE_PHOTO);
+                Log.d(TAG, outUri.toString());
             }
         });
     }
