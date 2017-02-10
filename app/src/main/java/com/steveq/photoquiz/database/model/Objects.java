@@ -11,6 +11,9 @@ public class Objects {
     @DatabaseField(unique = true)
     private String name;
 
+    @DatabaseField(unique = true)
+    private String path;
+
     public Objects(){
     }
 
@@ -32,5 +35,13 @@ public class Objects {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

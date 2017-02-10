@@ -18,8 +18,6 @@ public class FilesUtils {
     private static final String TAG = FilesUtils.class.getSimpleName();
     private Context mContext;
     private String fileType = ".jpg";
-    public static File outFile;
-    public static Uri outUri;
 
     public FilesUtils(Context context) {
         mContext = context;
@@ -50,8 +48,6 @@ public class FilesUtils {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            outFile = outputDir;
-            outUri = Uri.fromFile(photoFile);
             return Uri.fromFile(photoFile);
         } else {
             throw new IllegalStateException();

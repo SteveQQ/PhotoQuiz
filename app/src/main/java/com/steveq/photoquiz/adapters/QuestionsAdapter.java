@@ -1,6 +1,9 @@
 package com.steveq.photoquiz.adapters;
 
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.content.Context;
@@ -16,7 +19,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.steveq.photoquiz.FilesUtils;
+import com.steveq.photoquiz.MainActivity;
 import com.steveq.photoquiz.R;
 import com.steveq.photoquiz.database.DatabaseManager;
 import com.steveq.photoquiz.database.model.Objects;
@@ -25,7 +31,7 @@ import java.util.List;
 
 public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.QuestionViewHolder>{
 
-    private static final int REQUEST_TAKE_PHOTO = 0;
+    public static final int REQUEST_TAKE_PHOTO = 0;
     private static final String TAG = QuestionsAdapter.class.getSimpleName();
     private List<Objects> data;
     private AppCompatActivity mActivity;
@@ -63,18 +69,43 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
 
 
     @Override
-    public void onBindViewHolder(QuestionViewHolder holder, int position) {
+    public void onBindViewHolder(final QuestionViewHolder holder, final int position) {
         holder.questionTextView.setText(data.get(position).getName());
         holder.cameraImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Uri outUri = mFilesUtils.getOutputUri(mPlayerId);
+                DatabaseManager.getInstance(mActivity).addPath(data.get(position).get_id(), outUri.getPath());
                 Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, outUri);
-                mActivity.startActivityForResult(takePhotoIntent, REQUEST_TAKE_PHOTO);
+                ((MainActivity)mActivity).takePhotoHandle(data.get(position).get_id(), takePhotoIntent);
+                //mActivity.startActivityForResult(takePhotoIntent, REQUEST_TAKE_PHOTO);
                 Log.d(TAG, outUri.toString());
             }
         });
+        if(data.get(position).getPath() != null){
+            Picasso
+                    .with(mActivity)
+                    .load(R.drawable.camera_photo)
+                    .fit()
+                    .centerCrop()
+                    .into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            holder.questionTextView.setBackground(new BitmapDrawable(mActivity.getResources(), bitmap));
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Drawable errorDrawable) {
+
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                        }
+                    });
+        }
     }
 
     @Override

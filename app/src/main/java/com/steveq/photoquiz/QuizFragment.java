@@ -55,7 +55,7 @@ public class QuizFragment extends Fragment{
     }
 
     private void disableBack() {
-        ((MainActivity)mActivity).setBackAllowed(false);
+        ((MainActivity)mActivity).setBackAllowed(true);
     }
 
     private void enableScrolling() {

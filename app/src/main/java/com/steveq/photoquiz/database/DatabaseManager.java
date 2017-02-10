@@ -4,6 +4,7 @@ package com.steveq.photoquiz.database;
 import android.content.Context;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.steveq.photoquiz.database.model.Objects;
@@ -106,5 +107,33 @@ public class DatabaseManager {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void addPath(Long id, String path){
+        try {
+            UpdateBuilder<Objects, Long> updateBuilder = getHelper().getObjectsDao().updateBuilder();
+            updateBuilder.where().eq("_id", id);
+            updateBuilder.updateColumnValue("path", path);
+            updateBuilder.update();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deletePath(Long id){
+        addPath(id, null);
+    }
+
+    public String getPath(Long id){
+        try {
+            QueryBuilder<Objects, Long> queryBuilder = getHelper().getObjectsDao().queryBuilder();
+            queryBuilder.where().eq("_id", id);
+            queryBuilder.selectColumns("path");
+            List<Objects> objects = queryBuilder.query();
+            return objects.get(0).getPath();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

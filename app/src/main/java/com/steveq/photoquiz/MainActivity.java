@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.os.Environment;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -30,7 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements onTakePhotoHandler{
 
     public static final String RANKING_FRAGMENT = "RANKING_FRAGMENT";
     public static final String PREPARATION_FRAGMENT = "PREPARATION_FRAGMENT";
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity{
     private static final String TAG = MainActivity.class.getSimpleName();
     public static final String PLAYER_ID = "PLAYER_ID";
     private QuizOpenDatabaseHelper databaseHelper = null;
-    private Fragment currentFragment;
+    private long currentObjectId;
     private boolean backAllowed;
 
     @BindView(R.id.mainAppBar) AppBarLayout mAppBarLayout;
@@ -143,20 +142,28 @@ public class MainActivity extends AppCompatActivity{
         super.onActivityResult(requestCode, resultCode, data);
 
         if(resultCode == RESULT_OK){
-            Log.d(TAG, FilesUtils.outFile.getAbsolutePath());
-           // sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + FilesUtils.outFile.getAbsolutePath())));
+            String path = DatabaseManager.getInstance(this).getPath(currentObjectId);
 
             MediaScannerConnection.scanFile(getApplicationContext(),
-                    new String[]{FilesUtils.outUri.getPath()},
+                    new String[]{path},
                     null,
                     new MediaScannerConnection.OnScanCompletedListener()
                     {
                         @Override
                         public void onScanCompleted(String path, Uri uri) {
+                            if(uri == null){
+                                DatabaseManager.getInstance(MainActivity.this).deletePath(currentObjectId);
+                            }
                         }
                     });
         } else if (resultCode != RESULT_CANCELED) {
             Toast.makeText(this, "Sorry, there was an error!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void takePhotoHandle(long id, Intent intent) {
+        currentObjectId = id;
+        startActivityForResult(intent, QuestionsAdapter.REQUEST_TAKE_PHOTO);
     }
 }
