@@ -9,14 +9,15 @@
     android:fitsSystemWindows="true">
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <FrameLayout
-            android:id="@+id/fragmentContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </FrameLayout>
+        <!--<FrameLayout-->
+            <!--android:id="@+id/fragmentContainer"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="400dp">-->
+        <!--</FrameLayout>-->
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.AppBarLayout
@@ -65,6 +66,5 @@
         android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp"
         android:elevation="4dp"/>
-
 
 </android.support.design.widget.CoordinatorLayout>

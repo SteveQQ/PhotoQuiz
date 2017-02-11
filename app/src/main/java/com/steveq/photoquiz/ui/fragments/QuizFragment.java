@@ -1,4 +1,4 @@
-package com.steveq.photoquiz;
+package com.steveq.photoquiz.ui.fragments;
 
 
 import android.os.Bundle;
@@ -12,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.steveq.photoquiz.R;
 
 import com.steveq.photoquiz.adapters.QuestionsAdapter;
 
@@ -39,7 +41,7 @@ public class QuizFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Bundle args = getArguments();
-        long id = args.getLong(MainActivity.PLAYER_ID);
+        long id = args.getLong(com.steveq.photoquiz.ui.activities.MainActivity.PLAYER_ID);
 
         // Inflate the layout for this fragment
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_quiz, container, false);
@@ -55,14 +57,13 @@ public class QuizFragment extends Fragment{
     }
 
     private void disableBack() {
-        ((MainActivity)mActivity).setBackAllowed(true);
     }
 
     private void enableScrolling() {
-        CollapsingToolbarLayout coll = ((MainActivity)mActivity).getCollapsingToolbarLayout();
+        CollapsingToolbarLayout coll = ((com.steveq.photoquiz.ui.activities.MainActivity)mActivity).getCollapsingToolbarLayout();
         AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) coll.getLayoutParams();
         params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
         coll.setLayoutParams(params);
-        ((MainActivity)mActivity).setCollapsingToolbarLayout(coll);
+        ((com.steveq.photoquiz.ui.activities.MainActivity)mActivity).setCollapsingToolbarLayout(coll);
     }
 }

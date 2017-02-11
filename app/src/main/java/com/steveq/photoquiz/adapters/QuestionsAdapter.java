@@ -22,7 +22,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.steveq.photoquiz.FilesUtils;
-import com.steveq.photoquiz.MainActivity;
+import com.steveq.photoquiz.ui.activities.MainActivity;
 import com.steveq.photoquiz.R;
 import com.steveq.photoquiz.database.DatabaseManager;
 import com.steveq.photoquiz.database.model.Objects;
@@ -78,33 +78,13 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
                 DatabaseManager.getInstance(mActivity).addPath(data.get(position).get_id(), outUri.getPath());
                 Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, outUri);
-                ((MainActivity)mActivity).takePhotoHandle(data.get(position).get_id(), takePhotoIntent);
+                ((com.steveq.photoquiz.ui.activities.MainActivity)mActivity).takePhotoHandle(data.get(position).get_id(), takePhotoIntent);
                 //mActivity.startActivityForResult(takePhotoIntent, REQUEST_TAKE_PHOTO);
                 Log.d(TAG, outUri.toString());
             }
         });
         if(data.get(position).getPath() != null){
-            Picasso
-                    .with(mActivity)
-                    .load(R.drawable.camera_photo)
-                    .fit()
-                    .centerCrop()
-                    .into(new Target() {
-                        @Override
-                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            holder.questionTextView.setBackground(new BitmapDrawable(mActivity.getResources(), bitmap));
-                        }
 
-                        @Override
-                        public void onBitmapFailed(Drawable errorDrawable) {
-
-                        }
-
-                        @Override
-                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                        }
-                    });
         }
     }
 

@@ -1,4 +1,4 @@
-package com.steveq.photoquiz;
+package com.steveq.photoquiz.ui.fragments;
 
 
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.steveq.photoquiz.R;
 import com.steveq.photoquiz.adapters.RankingAdapter;
 
 
@@ -52,15 +53,14 @@ public class RankingFragment extends Fragment {
     }
 
     private void enableBack() {
-        ((MainActivity)mActivity).setBackAllowed(true);
     }
 
     private void disableScrolling() {
-        CollapsingToolbarLayout coll = ((MainActivity)mActivity).getCollapsingToolbarLayout();
+        CollapsingToolbarLayout coll = ((com.steveq.photoquiz.ui.activities.MainActivity)mActivity).getCollapsingToolbarLayout();
         AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) coll.getLayoutParams();
         params.setScrollFlags(0);
         coll.setLayoutParams(params);
-        ((MainActivity)mActivity).setCollapsingToolbarLayout(coll);
+        ((com.steveq.photoquiz.ui.activities.MainActivity)mActivity).setCollapsingToolbarLayout(coll);
     }
 
 }
