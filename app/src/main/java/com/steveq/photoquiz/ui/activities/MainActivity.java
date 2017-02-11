@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -63,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements onTakePhotoHandle
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .setCustomAnimations(R.anim.slide_right, R.anim.fade_out, R.anim.slide_left, R.anim.fade_out)
                 .add(R.id.fragmentContainer, new RankingFragment(), RANKING_FRAGMENT)
                 .commit();
     }
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements onTakePhotoHandle
         if(getCurrentFragment() instanceof RankingFragment){
             getSupportFragmentManager()
                     .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_right, R.anim.fade_out, R.anim.slide_left, R.anim.fade_out)
+                    .setCustomAnimations(R.anim.slide_left, R.anim.slide_lefter, R.anim.slide_right, R.anim.slide_righter)
                     .replace(R.id.fragmentContainer, new com.steveq.photoquiz.ui.fragments.PreparationFragment(), PREPARATION_FRAGMENT)
                     .addToBackStack(PREPARATION_FRAGMENT)
                     .commit();
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements onTakePhotoHandle
             quiz.setArguments(args);
             getSupportFragmentManager()
                     .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_right, R.anim.fade_out, R.anim.slide_left, R.anim.fade_out)
+                    .setCustomAnimations(R.anim.slide_left, R.anim.slide_lefter, R.anim.slide_right, R.anim.slide_righter)
                     .replace(R.id.fragmentContainer, quiz, QUIZ_FRAGMENT)
                     .addToBackStack(QUIZ_FRAGMENT)
                     .commit();

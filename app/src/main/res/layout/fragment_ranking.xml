@@ -3,21 +3,29 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
+              android:gravity="bottom"
               tools:context="com.steveq.photoquiz.ui.fragments.RankingFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Best Scores: "
-        android:textSize="@dimen/large_text"
-        android:paddingLeft="34dp"/>
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Best Scores: "
+    android:textSize="@dimen/large_text"
+    android:paddingLeft="34dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rankingRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:scrollbars="vertical"
-        android:padding="8dp"/>
+        android:padding="8dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+
 
 </LinearLayout>
+
