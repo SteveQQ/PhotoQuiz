@@ -9,13 +9,13 @@ public class Players {
     @DatabaseField(generatedId = true)
     private long _id;
 
-    @DatabaseField
+    @DatabaseField(canBeNull = false)
     private String name;
 
-    @DatabaseField
+    @DatabaseField(defaultValue = "0")
     private int score;
 
-    @DatabaseField
+    @DatabaseField(defaultValue = "false")
     private boolean saved;
 
     public Players(){

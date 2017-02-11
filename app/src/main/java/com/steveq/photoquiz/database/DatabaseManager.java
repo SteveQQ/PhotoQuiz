@@ -136,4 +136,8 @@ public class DatabaseManager {
         }
         return null;
     }
+
+    public void closeDb(){
+        OpenHelperManager.releaseHelper();
+    }
 }

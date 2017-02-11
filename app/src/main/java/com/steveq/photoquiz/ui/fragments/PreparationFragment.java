@@ -18,6 +18,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.steveq.photoquiz.R;
 import com.steveq.photoquiz.database.DatabaseManager;
@@ -84,7 +85,11 @@ public class PreparationFragment extends Fragment {
     }
 
     public long createPlayer(){
-        return DatabaseManager.getInstance(mActivity)
-                .addNewPlayer(nameEditText.getText().toString(), saveCheckBox.isChecked());
+        if(!nameEditText.getText().toString().equals("")){
+            return DatabaseManager.getInstance(mActivity)
+                    .addNewPlayer(nameEditText.getText().toString(), saveCheckBox.isChecked());
+        } else {
+            return -1;
+        }
     }
 }

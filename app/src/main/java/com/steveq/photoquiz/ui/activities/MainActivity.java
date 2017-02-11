@@ -1,6 +1,7 @@
 package com.steveq.photoquiz.ui.activities;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -40,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements onTakePhotoHandle
     private static final String QUIZ_FRAGMENT = "QUIZ_FRAGMENT";
     public static final String PLAYER_ID = "PLAYER_ID";
     private static final String TAG = MainActivity.class.getSimpleName();
-    private QuizOpenDatabaseHelper databaseHelper = null;
     private long currentObjectId;
 
     @BindView(R.id.mainAppBar) AppBarLayout mAppBarLayout;
@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements onTakePhotoHandle
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
@@ -79,35 +80,30 @@ public class MainActivity extends AppCompatActivity implements onTakePhotoHandle
                     .commit();
         } else if(getCurrentFragment() instanceof com.steveq.photoquiz.ui.fragments.PreparationFragment){
             long id = ((com.steveq.photoquiz.ui.fragments.PreparationFragment)getCurrentFragment()).createPlayer();
-            QuizFragment quiz = new QuizFragment();
-            Bundle args = new Bundle();
-            args.putLong(PLAYER_ID, id);
-            quiz.setArguments(args);
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_left, R.anim.slide_lefter, R.anim.slide_right, R.anim.slide_righter)
-                    .replace(R.id.fragmentContainer, quiz, QUIZ_FRAGMENT)
-                    .addToBackStack(QUIZ_FRAGMENT)
-                    .commit();
+            if(id > 0) {
+                QuizFragment quiz = new QuizFragment();
+                Bundle args = new Bundle();
+                args.putLong(PLAYER_ID, id);
+                quiz.setArguments(args);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_left, R.anim.slide_lefter, R.anim.slide_right, R.anim.slide_righter)
+                        .replace(R.id.fragmentContainer, quiz, QUIZ_FRAGMENT)
+                        .addToBackStack(QUIZ_FRAGMENT)
+                        .commit();
+            } else {
+                Toast.makeText(this, "You should insert a name", Toast.LENGTH_SHORT).show();
+            }
         }
-    }
-
-    private QuizOpenDatabaseHelper getHelper(){
-        if(databaseHelper == null){
-            databaseHelper = OpenHelperManager.getHelper(this, QuizOpenDatabaseHelper.class);
-        }
-        return databaseHelper;
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(databaseHelper != null){
-            OpenHelperManager.releaseHelper();
-            databaseHelper = null;
-        }
+        DatabaseManager.getInstance(this).closeDb();
     }
 
+    @TargetApi(24)
     public Fragment getCurrentFragment(){
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
         for(Fragment f : fragments){
