@@ -25,6 +25,7 @@ public class FilesUtils {
 
     public Uri getOutputUri(long id) throws IllegalStateException{
         File outputDir = null;
+        File photoFile = null;
         if(isSavingAllowed(id)){
             outputDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/PhotoQuiz");
 
@@ -32,25 +33,28 @@ public class FilesUtils {
                 outputDir.mkdirs();
             }
 
-            File photoFile = null;
             try {
                 photoFile = File.createTempFile(getUniqueFileName(), fileType, outputDir);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             return Uri.fromFile(photoFile);
+
         } else if(!isSavingAllowed(id)) {
+
             outputDir = mContext.getCacheDir();
 
-            File photoFile = null;
             try {
                 photoFile = File.createTempFile(getUniqueFileName(), fileType, outputDir);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             return Uri.fromFile(photoFile);
+
         } else {
+
             throw new IllegalStateException();
+
         }
     }
 

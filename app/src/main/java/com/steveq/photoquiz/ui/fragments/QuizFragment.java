@@ -26,6 +26,8 @@ public class QuizFragment extends Fragment{
     private RecyclerView quizRecyclerView;
     private QuestionsAdapter mAdapter;
     private AppCompatActivity mActivity;
+    public static long mCurrentPlayer;
+    public static long mCurrentObject;
 
     public QuizFragment() {
         // Required empty public constructor
@@ -41,12 +43,12 @@ public class QuizFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Bundle args = getArguments();
-        long id = args.getLong(com.steveq.photoquiz.ui.activities.MainActivity.PLAYER_ID);
+        mCurrentPlayer = args.getLong(com.steveq.photoquiz.ui.activities.MainActivity.PLAYER_ID);
 
         // Inflate the layout for this fragment
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_quiz, container, false);
         quizRecyclerView = (RecyclerView) viewGroup.findViewById(R.id.quizRecyclerView);
-        mAdapter = new QuestionsAdapter((AppCompatActivity) getContext(), id);
+        mAdapter = new QuestionsAdapter((AppCompatActivity) getContext());
         quizRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         quizRecyclerView.setAdapter(mAdapter);
 

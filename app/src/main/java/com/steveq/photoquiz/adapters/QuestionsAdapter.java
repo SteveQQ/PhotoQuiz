@@ -26,6 +26,7 @@ import com.steveq.photoquiz.ui.activities.MainActivity;
 import com.steveq.photoquiz.R;
 import com.steveq.photoquiz.database.DatabaseManager;
 import com.steveq.photoquiz.database.model.Objects;
+import com.steveq.photoquiz.ui.fragments.QuizFragment;
 
 import java.util.List;
 
@@ -36,13 +37,11 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
     private List<Objects> data;
     private AppCompatActivity mActivity;
     private FilesUtils mFilesUtils;
-    private long mPlayerId;
 
-    public QuestionsAdapter(AppCompatActivity activity, long id) {
+    public QuestionsAdapter(AppCompatActivity activity) {
         this.mActivity = activity;
         data = DatabaseManager.getInstance(mActivity).getRandomListObject();
         mFilesUtils = new FilesUtils(activity);
-        mPlayerId = id;
     }
 
     public class QuestionViewHolder extends RecyclerView.ViewHolder{
@@ -74,13 +73,12 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.Ques
         holder.cameraImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri outUri = mFilesUtils.getOutputUri(mPlayerId);
+                Uri outUri = mFilesUtils.getOutputUri(QuizFragment.mCurrentPlayer);
                 DatabaseManager.getInstance(mActivity).addPath(data.get(position).get_id(), outUri.getPath());
                 Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, outUri);
-                ((com.steveq.photoquiz.ui.activities.MainActivity)mActivity).takePhotoHandle(data.get(position).get_id(), takePhotoIntent);
-                //mActivity.startActivityForResult(takePhotoIntent, REQUEST_TAKE_PHOTO);
-                Log.d(TAG, outUri.toString());
+                takePhotoIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                ((MainActivity)mActivity).takePhotoHandle(data.get(position).get_id(), takePhotoIntent);
             }
         });
         if(data.get(position).getPath() != null){

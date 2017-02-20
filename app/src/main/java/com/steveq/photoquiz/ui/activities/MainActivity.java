@@ -15,6 +15,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.steveq.photoquiz.database.DatabaseManager;
 import com.steveq.photoquiz.database.QuizOpenDatabaseHelper;
 import com.steveq.photoquiz.onTakePhotoHandler;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
@@ -134,19 +136,33 @@ public class MainActivity extends AppCompatActivity implements onTakePhotoHandle
 
         if(resultCode == RESULT_OK){
             String path = DatabaseManager.getInstance(this).getPath(currentObjectId);
-
-            MediaScannerConnection.scanFile(getApplicationContext(),
-                    new String[]{path},
-                    null,
-                    new MediaScannerConnection.OnScanCompletedListener()
-                    {
-                        @Override
-                        public void onScanCompleted(String path, Uri uri) {
-                            if(uri == null){
-                                DatabaseManager.getInstance(com.steveq.photoquiz.ui.activities.MainActivity.this).deletePath(currentObjectId);
+            //call to google vision api
+            if(DatabaseManager.getInstance(this).isSaving(QuizFragment.mCurrentPlayer)){
+                MediaScannerConnection.scanFile(getApplicationContext(),
+                        new String[]{path},
+                        null,
+                        new MediaScannerConnection.OnScanCompletedListener()
+                        {
+                            @Override
+                            public void onScanCompleted(String path, Uri uri) {
+                                if(uri == null){
+                                    DatabaseManager.getInstance(com.steveq.photoquiz.ui.activities.MainActivity.this).deletePath(currentObjectId);
+                                }
                             }
-                        }
-                    });
+                        });
+            } else {
+                //delete photos from cache
+                File cache = new File(path);
+                Uri uri = Uri.parse(path);
+                List<String> pathSegments = uri.getPathSegments();
+                StringBuilder builder = new StringBuilder();
+                for(int i=0; i < pathSegments.size()-2; i++){
+                    builder.append(pathSegments.get(i));
+                }
+                Log.d(TAG, builder.toString());
+                File cacheDir = new File(builder.toString());
+            }
+
         } else if (resultCode != RESULT_CANCELED) {
             Toast.makeText(this, "Sorry, there was an error!", Toast.LENGTH_SHORT).show();
         }
@@ -155,6 +171,9 @@ public class MainActivity extends AppCompatActivity implements onTakePhotoHandle
     @Override
     public void takePhotoHandle(long id, Intent intent) {
         currentObjectId = id;
+        if(getCurrentFragment() instanceof QuizFragment){
+            QuizFragment.mCurrentObject = id;
+        }
         startActivityForResult(intent, QuestionsAdapter.REQUEST_TAKE_PHOTO);
     }
 }
