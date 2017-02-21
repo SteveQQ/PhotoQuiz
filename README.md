@@ -1,3 +1,6 @@
+###Development has been suspended because of restrictions of Google Cloud Services in EU
+###You can still use this project as reference for using ORMLite, Camera in Android, Storing camera images in Android, vector graphics, fragments animations, coordination layout
+
 #Synopsis
 
 Purpose of this project is to create entertaining app where user
